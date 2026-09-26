@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VPNApp.UI.SubscriptionsPage"
+             BackgroundColor="#0A0A0A"
+             Title="">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ШАПКА -->
+        <Grid Grid.Row="0" Padding="20,50,20,16"
+              ColumnDefinitions="Auto,*" BackgroundColor="#0A0A0A">
+            <Border Grid.Column="0"
+                   BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                   StrokeShape="RoundRectangle 10" Padding="10,8" Margin="0,0,12,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="‹" TextColor="#FFFFFF" FontSize="22"/>
+            </Border>
+            <Label Grid.Column="1" Text="Подписки"
+                   TextColor="#FFFFFF" FontSize="18" FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- СПИСОК ПОДПИСОК -->
+        <CollectionView Grid.Row="1" x:Name="GroupsCollection" Margin="20,0,20,10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                           StrokeShape="RoundRectangle 14" Padding="16" Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+
+                            <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                   Text="📁" FontSize="28"
+                                   VerticalOptions="Center" Margin="0,0,14,0"/>
+
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding Name}"
+                                   TextColor="#FFFFFF" FontSize="14" FontAttributes="Bold"/>
+
+                            <Label Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Subtitle}"
+                                   TextColor="#888888" FontSize="11"/>
+
+                            <Label Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding Url}"
+                                   TextColor="#444444" FontSize="10"
+                                   LineBreakMode="TailTruncation"/>
+
+                            <!-- Меню действий -->
+                            <StackLayout Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+                                         Orientation="Vertical" Spacing="8"
+                                         VerticalOptions="Center">
+                                <Border BackgroundColor="#2A2A2A" Stroke="Transparent"
+                                       StrokeShape="RoundRectangle 8" Padding="8,6">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Tapped="OnUpdateGroupClicked"
+                                            CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
+                                    <Label Text="🔄" FontSize="14" HorizontalOptions="Center"/>
+                                </Border>
+                                <Border BackgroundColor="#2A1A1A" Stroke="Transparent"
+                                       StrokeShape="RoundRectangle 8" Padding="8,6">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Tapped="OnDeleteGroupClicked"
+                                            CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
+                                    <Label Text="🗑" FontSize="14" HorizontalOptions="Center"/>
+                                </Border>
+                            </StackLayout>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                             Spacing="12" Padding="40">
+                    <Label Text="🔗" FontSize="48" HorizontalOptions="Center"/>
+                    <Label Text="Нет подписок"
+                           TextColor="#FFFFFF" FontSize="16" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Добавьте URL подписки или отдельный конфиг"
+                           TextColor="#555555" FontSize="13"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- КНОПКИ ДОБАВЛЕНИЯ -->
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,10,*"
+              Margin="20,0,20,30">
+
+            <!-- + Подписка -->
+            <Border Grid.Column="0"
+                    BackgroundColor="#FFFFFF"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="+ Подписка"
+                       TextColor="#000000"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="0,16"/>
+            </Border>
+
+            <!-- + Конфиг -->
+            <Border Grid.Column="2"
+                    BackgroundColor="#1E1E1E"
+                    Stroke="#FFFFFF"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddManualClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="+ Конфиг"
+                       TextColor="#FFFFFF"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="0,16"/>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</ContentPage>

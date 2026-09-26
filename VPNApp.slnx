@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="VPNApp.csproj">
+    <Deploy />
+  </Project>
+</Solution>

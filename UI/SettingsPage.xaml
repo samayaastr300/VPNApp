@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VPNApp.UI.SettingsPage"
+             BackgroundColor="#0A0A0A"
+             Title="">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ШАПКА -->
+        <Grid Grid.Row="0"
+              Padding="20,50,20,16"
+              ColumnDefinitions="Auto,*"
+              BackgroundColor="#0A0A0A">
+
+            <Border Grid.Column="0"
+                    BackgroundColor="#1E1E1E"
+                    Stroke="#2A2A2A"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="10,8"
+                    Margin="0,0,12,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="‹" TextColor="#FFFFFF" FontSize="22"/>
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Настройки"
+                   TextColor="#FFFFFF"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- КОНТЕНТ -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="20,0,20,30" Spacing="10">
+
+                <!-- Секция: Подключение -->
+                <Label Text="ПОДКЛЮЧЕНИЕ"
+                       TextColor="#888888"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       CharacterSpacing="1.5"
+                       Margin="4,16,0,6"/>
+
+                <!-- Режим маршрутизации -->
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                        StrokeShape="RoundRectangle 14" Padding="16">
+                    <StackLayout Spacing="12">
+                        <Label Text="Режим маршрутизации"
+                               TextColor="#FFFFFF"
+                               FontSize="14" FontAttributes="Bold"/>
+
+                        <!-- Proxy -->
+                        <Border x:Name="RoutingProxyBtn"
+                                BackgroundColor="#2A2A2A"
+                                Stroke="#FFFFFF"
+                                StrokeShape="RoundRectangle 10" Padding="14,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRoutingProxyClicked"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" Text="🔀"
+                                       FontSize="16" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                <StackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Умный (Proxy)"
+                                           TextColor="#FFFFFF" FontSize="13" FontAttributes="Bold"/>
+                                    <Label Text="Заблокированные сайты — через VPN"
+                                           TextColor="#888888" FontSize="11"/>
+                                </StackLayout>
+                                <Label x:Name="RoutingProxyCheck" Grid.Column="2"
+                                       Text="✓" TextColor="#FFFFFF" FontSize="16"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Global -->
+                        <Border x:Name="RoutingGlobalBtn"
+                                BackgroundColor="#1A1A1A"
+                                Stroke="#2A2A2A"
+                                StrokeShape="RoundRectangle 10" Padding="14,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRoutingGlobalClicked"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" Text="🌍"
+                                       FontSize="16" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                <StackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Глобальный"
+                                           TextColor="#FFFFFF" FontSize="13" FontAttributes="Bold"/>
+                                    <Label Text="Весь трафик через VPN"
+                                           TextColor="#888888" FontSize="11"/>
+                                </StackLayout>
+                                <Label x:Name="RoutingGlobalCheck" Grid.Column="2"
+                                       Text="✓" TextColor="#FFFFFF" FontSize="16"
+                                       VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Direct -->
+                        <Border x:Name="RoutingDirectBtn"
+                                BackgroundColor="#1A1A1A"
+                                Stroke="#2A2A2A"
+                                StrokeShape="RoundRectangle 10" Padding="14,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRoutingDirectClicked"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" Text="🔗"
+                                       FontSize="16" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                <StackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Прямой"
+                                           TextColor="#FFFFFF" FontSize="13" FontAttributes="Bold"/>
+                                    <Label Text="VPN отключён, прямое соединение"
+                                           TextColor="#888888" FontSize="11"/>
+                                </StackLayout>
+                                <Label x:Name="RoutingDirectCheck" Grid.Column="2"
+                                       Text="✓" TextColor="#FFFFFF" FontSize="16"
+                                       VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                        </Border>
+                    </StackLayout>
+                </Border>
+
+                <!-- Секция: Дополнительно -->
+                <Label Text="ДОПОЛНИТЕЛЬНО"
+                       TextColor="#888888"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       CharacterSpacing="1.5"
+                       Margin="4,10,0,6"/>
+
+                <!-- Kill-Switch -->
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                        StrokeShape="RoundRectangle 14" Padding="16">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="🔒"
+                               FontSize="20" VerticalOptions="Center" Margin="0,0,12,0"/>
+                        <StackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Kill-Switch"
+                                   TextColor="#FFFFFF" FontSize="14" FontAttributes="Bold"/>
+                            <Label Text="Блокировать трафик при разрыве VPN"
+                                   TextColor="#888888" FontSize="11"/>
+                        </StackLayout>
+                        <Switch Grid.Column="2"
+                                x:Name="KillSwitchToggle"
+                                ThumbColor="#FFFFFF" OnColor="#333333"
+                                VerticalOptions="Center"
+                                Toggled="OnKillSwitchToggled"/>
+                    </Grid>
+                </Border>
+
+                <!-- DNS -->
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                        StrokeShape="RoundRectangle 14" Padding="16">
+                    <StackLayout Spacing="10">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="🌐"
+                                   FontSize="20" VerticalOptions="Center" Margin="0,0,12,0"/>
+                            <Label Grid.Column="1"
+                                   Text="DNS сервер"
+                                   TextColor="#FFFFFF" FontSize="14" FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Border BackgroundColor="#2A2A2A" Stroke="#333333"
+                                StrokeShape="RoundRectangle 10" Padding="12,8">
+                            <Entry x:Name="DnsEntry"
+                                   Text="8.8.8.8"
+                                   TextColor="#FFFFFF"
+                                   PlaceholderColor="#555555"
+                                   Placeholder="8.8.8.8"
+                                   BackgroundColor="Transparent"
+                                   Keyboard="Url"
+                                   FontSize="14"
+                                   FontFamily="Monospace"/>
+                        </Border>
+                    </StackLayout>
+                </Border>
+
+                <!-- Секция: Обновление -->
+                <Label Text="ОБНОВЛЕНИЕ"
+                       TextColor="#888888"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       CharacterSpacing="1.5"
+                       Margin="4,10,0,6"/>
+
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A"
+                        StrokeShape="RoundRectangle 14" Padding="16">
+                    <StackLayout Spacing="12">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Label Grid.Column="0" Text="🔄"
+                                   FontSize="20" VerticalOptions="Center" Margin="0,0,12,0"/>
+                            <Label Grid.Column="1"
+                                   Text="Авто-обновление конфигов"
+                                   TextColor="#FFFFFF" FontSize="14" FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                            <Switch Grid.Column="2"
+                                    x:Name="AutoUpdateToggle"
+                                    IsToggled="True"
+                                    ThumbColor="#FFFFFF" OnColor="#333333"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#2A2A2A"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Интервал обновления"
+                                   TextColor="#888888" FontSize="13"
+                                   VerticalOptions="Center"/>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#2A2A2A" Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 8" Padding="10,6">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnIntervalClicked"/>
+                                </Border.GestureRecognizers>
+                                <Label x:Name="IntervalLabel"
+                                       Text="24 часа"
+                                       TextColor="#FFFFFF" FontSize="13" FontAttributes="Bold"/>
+                            </Border>
+                        </Grid>
+                    </StackLayout>
+                </Border>
+
+                <!-- Кнопка Сохранить -->
+                <Border BackgroundColor="#FFFFFF" Stroke="Transparent"
+                        StrokeShape="RoundRectangle 14" Padding="0"
+                        Margin="0,10,0,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSaveClicked"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="Сохранить настройки"
+                           TextColor="#000000"
+                           FontSize="15"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Padding="0,16"/>
+                </Border>
+
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

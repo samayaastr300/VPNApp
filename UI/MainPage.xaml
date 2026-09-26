@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VPNApp.UI.MainPage"
+             BackgroundColor="#0A0A0A"
+             Title="">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="BackgroundDark">#0A0A0A</Color>
+            <Color x:Key="SurfaceDark">#141414</Color>
+            <Color x:Key="CardDark">#1E1E1E</Color>
+            <Color x:Key="BorderDark">#2A2A2A</Color>
+            <Color x:Key="AccentWhite">#FFFFFF</Color>
+            <Color x:Key="TextPrimary">#FFFFFF</Color>
+            <Color x:Key="TextSecondary">#888888</Color>
+            <Color x:Key="TextMuted">#444444</Color>
+            <Color x:Key="ConnectedGreen">#00FF88</Color>
+            <Color x:Key="DisconnectedRed">#FF3B3B</Color>
+            <Color x:Key="ConnectingYellow">#FFD700</Color>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1E1E1E"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+                <Setter Property="Padding" Value="18"/>
+            </Style>
+
+            <Style x:Key="SectionLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="#888888"/>
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="CharacterSpacing" Value="1.5"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ── ВЕРХНЯЯ ШАПКА ── -->
+        <Grid Grid.Row="0"
+              Padding="20,50,20,16"
+              ColumnDefinitions="*,Auto,Auto"
+              BackgroundColor="#0A0A0A">
+
+            <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalOptions="Center">
+                <Border BackgroundColor="#1E1E1E"
+                        Stroke="#2A2A2A"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="8">
+                    <Label Text="🛡" FontSize="20" VerticalOptions="Center"/>
+                </Border>
+                <StackLayout Spacing="2" VerticalOptions="Center">
+                    <Label Text="VPN Shield"
+                           TextColor="#FFFFFF"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    <Label Text="v1.0.0"
+                           TextColor="#444444"
+                           FontSize="11"/>
+                </StackLayout>
+            </StackLayout>
+
+            <Border Grid.Column="1"
+                    BackgroundColor="#1E1E1E"
+                    Stroke="#2A2A2A"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="10,8"
+                    Margin="0,0,8,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnServersClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="☰" TextColor="#FFFFFF" FontSize="18"/>
+            </Border>
+
+            <Border Grid.Column="2"
+                    BackgroundColor="#1E1E1E"
+                    Stroke="#2A2A2A"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="10,8">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSettingsClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="⚙" TextColor="#FFFFFF" FontSize="18"/>
+            </Border>
+
+        </Grid>
+
+        <!-- ── ОСНОВНОЙ КОНТЕНТ ── -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="20,0,20,20" Spacing="14">
+
+                <!-- КАРТОЧКА: Статус -->
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                    <StackLayout Spacing="20">
+
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalOptions="Center">
+                                <Ellipse x:Name="StatusDot"
+                                         Fill="#FF3B3B"
+                                         WidthRequest="10"
+                                         HeightRequest="10"
+                                         VerticalOptions="Center"/>
+                                <Label x:Name="StatusLabel"
+                                       Text="НЕ ПОДКЛЮЧЕНО"
+                                       TextColor="#FF3B3B"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       CharacterSpacing="1.5"
+                                       VerticalOptions="Center"/>
+                            </StackLayout>
+
+                            <Label x:Name="TimerLabel"
+                                   Grid.Column="2"
+                                   Text="00:00:00"
+                                   TextColor="#444444"
+                                   FontSize="13"
+                                   FontFamily="Monospace"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- IP-инфо (показывается после подключения) -->
+                        <Label x:Name="IpInfoLabel"
+                               Text=""
+                               TextColor="#888888"
+                               FontSize="12"
+                               FontFamily="Monospace"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               IsVisible="False"/>
+
+                        <Grid HorizontalOptions="Center" VerticalOptions="Center">
+
+                            <Ellipse Fill="Transparent"
+                                     Stroke="#2A2A2A"
+                                     StrokeThickness="1"
+                                     WidthRequest="180"
+                                     HeightRequest="180"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"/>
+
+                            <Ellipse Fill="Transparent"
+                                     Stroke="#222222"
+                                     StrokeThickness="1"
+                                     WidthRequest="160"
+                                     HeightRequest="160"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"/>
+
+                            <Border x:Name="ConnectButton"
+                                    BackgroundColor="#1E1E1E"
+                                    Stroke="#FFFFFF"
+                                    StrokeShape="RoundRectangle 65"
+                                    WidthRequest="130"
+                                    HeightRequest="130"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnConnectClicked"/>
+                                </Border.GestureRecognizers>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6">
+                                    <Label Text="⏻"
+                                           FontSize="36"
+                                           TextColor="#FFFFFF"
+                                           HorizontalOptions="Center"/>
+                                    <Label x:Name="ConnectBtnLabel"
+                                           Text="ПОДКЛЮЧИТЬ"
+                                           TextColor="#FFFFFF"
+                                           FontSize="10"
+                                           FontAttributes="Bold"
+                                           CharacterSpacing="0.8"
+                                           HorizontalOptions="Center"/>
+                                </StackLayout>
+                            </Border>
+                        </Grid>
+
+                    </StackLayout>
+                </Border>
+
+                <!-- КАРТОЧКА: Текущий сервер -->
+                <Label Text="ТЕКУЩИЙ СЕРВЕР" Style="{StaticResource SectionLabel}" Margin="4,6,0,0"/>
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnChangeServerClicked"/>
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+
+                        <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                BackgroundColor="#2A2A2A"
+                                Stroke="#333333"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="10"
+                                VerticalOptions="Center"
+                                Margin="0,0,14,0">
+                            <Label x:Name="ServerFlagLabel"
+                                   Text="🌐"
+                                   FontSize="24"
+                                   VerticalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               x:Name="ServerNameLabel"
+                               Text="Выберите сервер"
+                               TextColor="#FFFFFF"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               VerticalOptions="End"/>
+
+                        <StackLayout Grid.Row="1" Grid.Column="1"
+                                     Orientation="Horizontal" Spacing="8">
+                            <Border BackgroundColor="#2A2A2A"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 6"
+                                    Padding="6,3">
+                                <Label x:Name="ProtocolLabel"
+                                       Text="—"
+                                       TextColor="#888888"
+                                       FontSize="10"
+                                       FontAttributes="Bold"/>
+                            </Border>
+                            <Label x:Name="PingLabel"
+                                   Text="— ms"
+                                   TextColor="#888888"
+                                   FontSize="12"
+                                   VerticalOptions="Center"/>
+                        </StackLayout>
+
+                        <Label Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                               Text="›"
+                               TextColor="#444444"
+                               FontSize="24"
+                               VerticalOptions="Center"/>
+
+                    </Grid>
+                </Border>
+
+                <!-- КАРТОЧКА: Трафик -->
+                <Label Text="ТРАФИК" Style="{StaticResource SectionLabel}" Margin="4,6,0,0"/>
+                <Grid ColumnDefinitions="*,12,*" RowDefinitions="Auto">
+
+                    <Border Grid.Column="0" BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                        <StackLayout Spacing="6">
+                            <Label Text="↓  ВХОДЯЩИЙ"
+                                   TextColor="#888888"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1"/>
+                            <Label x:Name="DownloadLabel"
+                                   Text="0 B"
+                                   TextColor="#FFFFFF"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   FontFamily="Monospace"/>
+                            <Label x:Name="DownloadSpeedLabel"
+                                   Text="0 B/s"
+                                   TextColor="#444444"
+                                   FontSize="12"/>
+                        </StackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2" BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                        <StackLayout Spacing="6">
+                            <Label Text="↑  ИСХОДЯЩИЙ"
+                                   TextColor="#888888"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1"/>
+                            <Label x:Name="UploadLabel"
+                                   Text="0 B"
+                                   TextColor="#FFFFFF"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   FontFamily="Monospace"/>
+                            <Label x:Name="UploadSpeedLabel"
+                                   Text="0 B/s"
+                                   TextColor="#444444"
+                                   FontSize="12"/>
+                        </StackLayout>
+                    </Border>
+
+                </Grid>
+
+                <!-- КАРТОЧКА: Подписки -->
+                <Label Text="ПОДПИСКИ" Style="{StaticResource SectionLabel}" Margin="4,6,0,0"/>
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                    <StackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Группы серверов"
+                                   TextColor="#FFFFFF"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#FFFFFF"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="12,7">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAddSubscriptionClicked"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="+ Добавить"
+                                       TextColor="#000000"
+                                       FontSize="12"
+                                       FontAttributes="Bold"/>
+                            </Border>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" BackgroundColor="#2A2A2A"/>
+
+                        <CollectionView x:Name="SubscriptionsCollection"
+                                        HeightRequest="120">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,8">
+                                        <Label Grid.Column="0"
+                                               Text="📁"
+                                               FontSize="16"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <StackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Text="{Binding Name}"
+                                                   TextColor="#FFFFFF"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding ServerCount, StringFormat='{0} серверов'}"
+                                                   TextColor="#888888"
+                                                   FontSize="11"/>
+                                        </StackLayout>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               TextColor="#444444"
+                                               FontSize="20"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                    <Label Text="🔗" FontSize="28" HorizontalOptions="Center"/>
+                                    <Label Text="Добавьте URL подписки"
+                                           TextColor="#444444"
+                                           FontSize="12"
+                                           HorizontalOptions="Center"/>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+
+                    </StackLayout>
+                </Border>
+
+                <!-- КАРТОЧКА: Автообновление -->
+                <Border BackgroundColor="#1E1E1E" Stroke="#2A2A2A" StrokeShape="RoundRectangle 16" Padding="18">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0"
+                               Text="🔄"
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               Margin="0,0,12,0"/>
+                        <StackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Авто-обновление конфигов"
+                                   TextColor="#FFFFFF"
+                                   FontSize="13"
+                                   FontAttributes="Bold"/>
+                            <Label x:Name="LastUpdateLabel"
+                                   Text="Последнее: никогда"
+                                   TextColor="#888888"
+                                   FontSize="11"/>
+                        </StackLayout>
+                        <Switch Grid.Column="2"
+                                x:Name="AutoUpdateSwitch"
+                                IsToggled="True"
+                                ThumbColor="#FFFFFF"
+                                OnColor="#333333"
+                                VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <BoxView HeightRequest="10" BackgroundColor="Transparent"/>
+
+            </StackLayout>
+        </ScrollView>
+
+        <!-- ── НИЖНЯЯ НАВИГАЦИЯ ── -->
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,*,*,*"
+              BackgroundColor="#0F0F0F"
+              Padding="10,12">
+
+            <StackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavHomeClicked"/>
+                </StackLayout.GestureRecognizers>
+                <Label Text="🏠" FontSize="20" HorizontalOptions="Center"/>
+                <Label Text="Главная"
+                       TextColor="#FFFFFF"
+                       FontSize="10"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+
+            <StackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavServersClicked"/>
+                </StackLayout.GestureRecognizers>
+                <Label Text="🌐" FontSize="20" HorizontalOptions="Center"/>
+                <Label Text="Серверы"
+                       TextColor="#555555"
+                       FontSize="10"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+
+            <StackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavSubscriptionsClicked"/>
+                </StackLayout.GestureRecognizers>
+                <Label Text="🔗" FontSize="20" HorizontalOptions="Center"/>
+                <Label Text="Подписки"
+                       TextColor="#555555"
+                       FontSize="10"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+
+            <StackLayout Grid.Column="3" Spacing="4" HorizontalOptions="Center">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavSettingsClicked"/>
+                </StackLayout.GestureRecognizers>
+                <Label Text="⚙" FontSize="20" HorizontalOptions="Center"/>
+                <Label Text="Настройки"
+                       TextColor="#555555"
+                       FontSize="10"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+
+        </Grid>
+
+    </Grid>
+</ContentPage>

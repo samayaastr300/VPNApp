@@ -1,0 +1,25 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+.vs/
+
+# User-specific
+*.user
+*.suo
+
+# MAUI / Android
+*.apk
+*.aab
+*.ipa
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Прочее
+*.log
+
+# sing-box бинарник (тяжёлый, пусть друг скачает сам)
+Resources/Raw/sing-box.exe
+Resources/Raw/sing-box
